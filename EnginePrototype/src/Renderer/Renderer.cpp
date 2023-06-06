@@ -10,17 +10,17 @@
 
 namespace EnginePrototype::Renderer
 {
-    const GLfloat vertices[] =
+    static const std::vector<Vertex> vertices =
     {
-        -0.5f, -0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.5f, 0.5f, 0.0f,
+        {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}},
+        {{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
+        {{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}},
+        {{-0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}}
     };
 
     const GLuint indices[] = 
     {
-        0,1,2,1,2,3
+        0, 1, 2, 2, 3, 0
     };
 
     GLuint shaderProgram;
@@ -29,6 +29,8 @@ namespace EnginePrototype::Renderer
     GLuint vertexBuffer;
 
     GLuint elementBuffer;
+
+    GLuint uniformBuffer;
 
     int readFile(const std::string& filename, std::vector<char>& buffer);
 
@@ -112,15 +114,17 @@ namespace EnginePrototype::Renderer
         // Create Vertex Buffer
         glGenBuffers(1, &vertexBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
         // Create Element / Index Buffer
         glGenBuffers(1, &elementBuffer);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), nullptr);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, pos));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
         glEnableVertexAttribArray(0);
+        glEnableVertexAttribArray(1);
 
         // Unbind Buffers
         glBindVertexArray(0);
@@ -157,10 +161,10 @@ namespace EnginePrototype::Renderer
 
     void RenderFrame()
     {
-        glClearColor(0.f, 0.f, 1.0f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
+
         glBindVertexArray(vertexArray);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

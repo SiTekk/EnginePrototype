@@ -14,7 +14,8 @@ project "EnginePrototype"
     filter "system:windows"
         includedirs {
             "../vendor/glfw/include",
-            "../vendor/glad/include"
+            "../vendor/glad/include",
+            "../vendor/glm"
         }
 
         links {

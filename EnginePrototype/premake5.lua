@@ -15,7 +15,8 @@ project "EnginePrototype"
         includedirs {
             "../vendor/glfw/include",
             "../vendor/glad/include",
-            "../vendor/glm"
+            "../vendor/glm",
+            "../vendor/stb"
         }
 
         links {

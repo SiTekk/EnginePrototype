@@ -13,15 +13,18 @@ project "EnginePrototype"
 
     filter "system:windows"
         includedirs {
-            "../vendor/glfw/include",
             "../vendor/glad/include",
+            "../vendor/glfw/include",
             "../vendor/glm",
+            "../vendor/imgui",
+            "../vendor/imgui/backends",
             "../vendor/stb"
         }
 
         links {
-        "GLFW",
         "GLAD",
+        "GLFW",
+        "ImGui",
         "opengl32.lib"
         }
 

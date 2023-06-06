@@ -6,8 +6,9 @@ workspace "EnginePrototype"
 outputdir = "%{cfg.buildcfg}"
 
 include "EnginePrototype"
-include "vendor/premake5_glfw.lua"
 include "vendor/premake5_glad.lua"
+include "vendor/premake5_glfw.lua"
+include "vendor/premake5_imgui.lua"
 
 -- if os.host() == "windows" then
 --     include "vendor/premake5_glfw.lua"
